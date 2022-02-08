@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    url:
+      jdbc:mysql://localhost:3306/blogdb?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+    username: root
+    password: G00dD@ySunshine
+  jpa:
+    hibernate.ddl-auto: validate
+    show-sql: false
+  flyway.enabled: true
+init:
+  title: DevPub
+  subtitle: Рассказы разработчиков
+  phone: +7 903 666-44-55
+  email: mail@mail.ru
+  copyright: Дмитрий Сергеев
+  copyrightFrom: 2005
+flyway:
+  user: root
+  password: G00dD@ySunshine
+  schemas: app-db
+  url: jdbc:mysql://localhost:3306/blogdb
+captcha:
+  length: 6
+  aging_time_in_minutes: 60
+  fixed_rate_in_minutes: 10
+register.min_password_length: 6
+post:
+  min_text_length: 50
+  min_title_length: 2
+image:
+  max_size_in_bytes: 5242880
+  square_photo_size_in_pixels: 36
+
+
+
