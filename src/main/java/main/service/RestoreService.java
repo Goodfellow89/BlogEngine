@@ -15,6 +15,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -28,7 +29,7 @@ public class RestoreService {
     @Value("${register.min_password_length}")
     private int minPasswordLength;
 
-    public EditResponse restore(String email) {
+    public EditResponse restore(String email, HttpServletRequest request) {
 
         Logger logger = LogManager.getLogger(RestoreService.class);
 
@@ -39,12 +40,11 @@ public class RestoreService {
         if (user != null) {
             SimpleMailMessage message = new SimpleMailMessage();
             String hash = generateHash();
-            message.setFrom("noreply@devpub.ru");
             message.setTo(email);
             message.setSubject("Восстановление пароля");
-            message.setText("/login/change-password/" + hash);
+            message.setText("Link to restore: " + request.getHeader("origin") + "/login/change-password/" + hash);
 
-            logger.log(Level.INFO, "Link to restore: " + message.getText());
+            logger.log(Level.INFO, message.getText());
 
             user.setCode(hash);
             usersRepository.save(user);

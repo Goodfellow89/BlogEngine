@@ -1,7 +1,6 @@
 spring:
   datasource:
-    url:
-      jdbc:${JAWSDB_URL:mysql://localhost:3306/blogdb?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true}
+    url: jdbc:${JAWSDB_URL:mysql://localhost:3306/blogdb?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true}
     username: root
     password: G00dD@ySunshine
   jpa:
@@ -32,6 +31,8 @@ post:
 image:
   max_size_in_bytes: 5242880
   square_photo_size_in_pixels: 36
-
-
-
+mail:
+  host: smtp.gmail.com
+  port: 587
+  address: goodfellow.saimon@gmail.com
+  password: bclxbwuwazvqbapf

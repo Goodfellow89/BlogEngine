@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestController
@@ -56,8 +57,8 @@ public class ApiAuthController {
     }
 
     @PostMapping("/restore")
-    public EditResponse restore(@RequestBody Map<String, String> email) {
-        return restoreService.restore(email.get("email"));
+    public EditResponse restore(@RequestBody Map<String, String> email, HttpServletRequest request) {
+        return restoreService.restore(email.get("email"), request);
     }
 
     @PostMapping("/password")
