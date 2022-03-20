@@ -40,6 +40,8 @@ public class AuthRegisterService {
         String captcha = request.getCaptcha();
         String captchaSecret = request.getCaptchaSecret();
 
+        System.out.println(usersRepository.emailCount(email));
+
         if (name.trim().isEmpty() || !name.replaceAll("[A-Za-zА-Яа-я\\s]", "").isEmpty()) {
             errors.put("name", "Имя указано неверно");
         }

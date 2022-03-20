@@ -43,7 +43,7 @@ public class ApiAuthController {
         if (response == null) {
             ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        return new ResponseEntity<>(authRegisterService.register(request), HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/login")

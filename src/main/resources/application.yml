@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:${JAWSDB_URL:mysql://localhost:3306/blogdb?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true}
+    url: jdbc:${JAWSDB_URL:mysql://localhost:3306/blogdb}
     username: root
     password: G00dD@ySunshine
   jpa:

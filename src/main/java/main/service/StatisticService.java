@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.ZoneId;
 
 @Service
@@ -33,24 +34,26 @@ public class StatisticService {
         response.setLikesCount(votesRepository.countAllVotesOfMyPosts(1, user.getId()));
         response.setDislikesCount(votesRepository.countAllVotesOfMyPosts(-1, user.getId()));
         response.setViewsCount(postsRepository.countAllViewsOfMyPosts(user.getId()));
-        response.setFirstPublication(postsRepository.findTimeOfFirstMyPost(user.getId()).toLocalDateTime().atZone(ZoneId.systemDefault()).toEpochSecond());
+
+        Timestamp firstPublication = postsRepository.findTimeOfFirstMyPost(user.getId());
+        if (firstPublication == null) {
+            response.setFirstPublication(0);
+        } else {
+            response.setFirstPublication(firstPublication.toLocalDateTime().atZone(ZoneId.systemDefault()).toEpochSecond());
+        }
 
         return response;
     }
 
     public StatisticResponse getAll() {
         if (settingsRepository.getSetting("STATISTICS_IS_PUBLIC").getValue().equals("YES")) {
-            return getStatisticsForAll();
+            return getStatistics();
         }
         return getStatisticsForModerator();
     }
 
     @PreAuthorize("hasAuthority('moderator')")
     public StatisticResponse getStatisticsForModerator() {
-        return getStatistics();
-    }
-
-    public StatisticResponse getStatisticsForAll() {
         return getStatistics();
     }
 
@@ -61,7 +64,13 @@ public class StatisticService {
         response.setLikesCount(votesRepository.allVotesCount(1));
         response.setDislikesCount(votesRepository.allVotesCount(-1));
         response.setViewsCount(postsRepository.countAllViews());
-        response.setFirstPublication(postsRepository.findTimeOfFirstPost().toLocalDateTime().atZone(ZoneId.systemDefault()).toEpochSecond());
+
+        Timestamp firstPublication = postsRepository.findTimeOfFirstPost();
+        if (firstPublication == null) {
+            response.setFirstPublication(0);
+        } else {
+            response.setFirstPublication(firstPublication.toLocalDateTime().atZone(ZoneId.systemDefault()).toEpochSecond());
+        }
 
         return response;
     }

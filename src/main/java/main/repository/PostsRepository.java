@@ -35,7 +35,7 @@ public interface PostsRepository extends CrudRepository<Post, Integer> {
     @Query(value = "select posts.* from posts, post_comments where posts.is_active = 1 and posts.moderation_status = 'ACCEPTED' and posts.time <= now() group by posts.id order by (select count(*) from post_comments where post_comments.post_id = posts.id group by posts.id) desc, posts.title " + offsetAndLimit, nativeQuery = true)
     List<Post> findAllAcceptedPostsOrderedByCommentsCount(@Param("limit") int limit, @Param("offset") int offset);
 
-    @Query(value = "select posts.* from posts, post_votes where posts.is_active = 1 and posts.moderation_status = 'ACCEPTED' and posts.time <= now() group by posts.id order by (select sum(value) from post_votes where post_votes.post_id = posts.id group by posts.id) desc, (select sum(value) from post_votes where post_votes.post_id = posts.id and value = 1 group by posts.id) desc, posts.title " + offsetAndLimit, nativeQuery = true)
+    @Query(value = "select posts.* from posts, post_votes where posts.is_active = 1 and posts.moderation_status = 'ACCEPTED' and posts.time <= now() group by posts.id order by (select ifnull(sum(value), 0) from post_votes where post_votes.post_id = posts.id group by posts.id) desc, (select ifnull(sum(value), 0) from post_votes where post_votes.post_id = posts.id and value = 1 group by posts.id) desc, posts.title " + offsetAndLimit, nativeQuery = true)
     List<Post> findAllAcceptedPostsOrderedByLikes(@Param("limit") int limit, @Param("offset") int offset);
 
     @Query(value = selectAccepted + " order by time " + offsetAndLimit, nativeQuery = true)
@@ -85,13 +85,13 @@ public interface PostsRepository extends CrudRepository<Post, Integer> {
     @Query(value = "select * from posts where user_id = :user_id and is_active = 1 and moderation_status = :status " + offsetAndLimit, nativeQuery = true)
     List<Post> findMyActivePosts(@Param("limit") int limit, @Param("offset") int offset, @Param("user_id") int userId, @Param("status") String modStatus);
 
-    @Query(value = "select sum(view_count) from posts where user_id = :user_id", nativeQuery = true)
+    @Query(value = "select ifnull(sum(view_count), 0) from posts where user_id = :user_id", nativeQuery = true)
     int countAllViewsOfMyPosts(@Param("user_id") int userId);
 
     @Query(value = "select min(time) from posts where user_id = :user_id and is_active = 1 and moderation_status = 'ACCEPTED'", nativeQuery = true)
     Timestamp findTimeOfFirstMyPost(@Param("user_id") int userId);
 
-    @Query(value = "select sum(view_count) from posts", nativeQuery = true)
+    @Query(value = "select ifnull(sum(view_count), 0) from posts", nativeQuery = true)
     int countAllViews();
 
     @Query(value = "select min(time) from posts where is_active = 1 and moderation_status = 'ACCEPTED'", nativeQuery = true)

@@ -9,12 +9,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UsersRepository extends CrudRepository<User, Integer> {
 
-    @Query(value = "select count(*) from users where email = ':email'", nativeQuery = true)
+    @Query(value = "select count(*) from users where email = :email", nativeQuery = true)
     int emailCount(@Param("email") String email);
 
-    @Query(value = "select * from users where email = ':email'", nativeQuery = true)
+    @Query(value = "select * from users where email = :email", nativeQuery = true)
     User findByEmail(@Param("email") String email);
 
-    @Query(value = "select * from users where code = ':code'", nativeQuery = true)
+    @Query(value = "select * from users where code = :code", nativeQuery = true)
     User findByCode(@Param("code") String code);
 }
